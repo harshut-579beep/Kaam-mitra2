@@ -12,7 +12,7 @@ jobs:
       - name: Extract Project Zip File
         run: |
           echo "=== UNZIPPING THE REAL PROJECT CODE ==="
-          unzip remix-kaam-mitra.zip
+          unzip -o remix-kaam-mitra.zip
           
           echo "=== SCANNING AND ORGANIZING FILES ==="
           if [ -d "remix-kaam-mitra" ]; then
@@ -62,3 +62,4 @@ jobs:
         with:
           name: Kaam-Mitra-Debug-APK
           path: "**/build/outputs/apk/debug/*.apk"
+
