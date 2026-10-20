@@ -20,40 +20,32 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Force Build Web Assets
+      - name: Build Web Assets Direct
         run: |
-          # Faltu lockfiles saaf karein
+          # Bina kisi folder ke, direct root par execute karein
           rm -f bun.lock package-lock.json
-          
-          # Dependencies bina strict errors ke install karein
-          npm install --legacy-peer-deps --force
-          
-          # TypeScript aur Lint compile errors ko ignore karke safe web build karein
-          npx vite build --emptyOutDir || true
+          npm install --legacy-peer-deps
+          npx vite build || true
 
-      - name: Setup Android Environment and Sync
+      - name: Configure Android SDK and Sync
         run: |
-          # Android SDK ka proper global path configure karein
-          mkdir -p android
+          # Direct root ke andar android folder trace karein
           echo "sdk.dir=/usr/local/lib/android/sdk" > android/local.properties
-          
-          # Capacitor sync pipeline execute karein
+          echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
           npx cap sync android --no-build || true
 
       - name: Accept Android Licenses
-        run: |
-          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+        run: yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
       - name: Compile and Assemble APK
         run: |
           cd android
           chmod +x gradlew
-          # Purana cache clear karke fresh assembleDebug execute karein
           ./gradlew clean
-          ./gradlew assembleDebug --stacktrace -x test
+          ./gradlew assembleDebug --stacktrace
 
       - name: Upload Finished APK
         uses: actions/upload-artifact@v4
         with:
           name: Kaam-Mitra-Debug-APK
-          path: "android/app/build/outputs/apk/debug/app-debug.apk"
+          path: android/app/build/outputs/apk/debug/app-debug.apk
