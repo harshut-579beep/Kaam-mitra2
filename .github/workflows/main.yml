@@ -20,44 +20,32 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Auto-Detect Paths and Build App
+      - name: Build Web Project and Sync Capacitor
         run: |
-          # 1. Sabse pehle package.json ka sahi rasta dhoondhein
-          PACKAGE_JSON_PATH=$(find . -name "package.json" -not -path "*/node_modules/*" | head -n 1)
-          PROJECT_ROOT=$(dirname "$PACKAGE_JSON_PATH")
-          echo "Project root found at: $PROJECT_ROOT"
-          cd "$PROJECT_ROOT"
-
-          # Faltu lockfiles saaf karein confusion se bachne ke liye
-          rm -f bun.lock package-lock.json
-
-          # 2. Dependencies install karein
-          npm install --legacy-peer-deps
-
-          # 3. Web assets ko safe mode me build karein
-          npx vite build || true
-
-          # 4. Android SDK paths setup karein
-          export ANDROID_HOME=/usr/local/lib/android/sdk
-          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
+          # Sahi folder ke andar enter karein jahan package.json chhupi hai
+          cd Kaam-mitra2
           
-          # Android folder locate karein
-          ANDROID_FOLDER=$(find . -type d -name "android" | head -n 1)
-          if [ -z "$ANDROID_FOLDER" ]; then
-            ANDROID_FOLDER=$(find . -name "build.gradle" | head -n 1 | xargs dirname | xargs dirname)
-          fi
-          echo "Android folder found at: $ANDROID_FOLDER"
-
-          # local.properties configure karein
-          echo "sdk.dir=/usr/local/lib/android/sdk" > "$ANDROID_FOLDER/local.properties"
-
-          # 5. Capacitor sync karein
+          # Faltu lockfiles ko clear karein
+          rm -f bun.lock package-lock.json
+          
+          # Dependencies aur Web Build execute karein
+          npm install --legacy-peer-deps
+          npx vite build || true
+          
+          # Capacitor sync run karein
           npx cap sync android || true
 
-          # 6. Licenses accept karein aur Gradle run karein
-          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          
-          cd "$ANDROID_FOLDER"
+      - name: Configure Android SDK Path
+        run: |
+          echo "sdk.dir=/usr/local/lib/android/sdk" > Kaam-mitra2/android/local.properties
+          echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
+
+      - name: Accept All Android Licenses
+        run: yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+      - name: Build Debug APK via Gradle
+        run: |
+          cd Kaam-mitra2/android
           chmod +x gradlew
           ./gradlew clean
           ./gradlew assembleDebug --stacktrace
@@ -66,5 +54,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Kaam-Mitra-Debug-APK
-          path: "**/build/outputs/apk/debug/*.apk"
-          
+          path: Kaam-mitra2/android/app/build/outputs/apk/debug/app-debug.apk
