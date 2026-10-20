@@ -62,4 +62,3 @@ jobs:
         with:
           name: Kaam-Mitra-Debug-APK
           path: "**/build/outputs/apk/debug/*.apk"
-          name: Build Android APK
