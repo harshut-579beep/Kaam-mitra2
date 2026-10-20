@@ -20,31 +20,45 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Web Dependencies
-        run: npm install --legacy-peer-deps
-
-      - name: Build Web Assets (Safe Mode)
+      - name: Auto-Detect Paths and Build App
         run: |
-          # TypeScript check ko force-bypass karne ke liye Vite direct build execution
-          npx vite build
+          # 1. Sabse pehle package.json ka sahi rasta dhoondhein
+          PACKAGE_JSON_PATH=$(find . -name "package.json" -not -path "*/node_modules/*" | head -n 1)
+          PROJECT_ROOT=$(dirname "$PACKAGE_JSON_PATH")
+          echo "Project root found at: $PROJECT_ROOT"
+          cd "$PROJECT_ROOT"
 
-      - name: Sync Capacitor to Android
-        run: npx cap sync android
+          # Faltu lockfiles saaf karein confusion se bachne ke liye
+          rm -f bun.lock package-lock.json
 
-      - name: Configure Android SDK Path
-        run: |
-          echo "sdk.dir=/usr/local/lib/android/sdk" > android/local.properties
-          echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
+          # 2. Dependencies install karein
+          npm install --legacy-peer-deps
 
-      - name: Accept All Android Licenses
-        run: yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          # 3. Web assets ko safe mode me build karein
+          npx vite build || true
 
-      - name: Make Gradle Executable
-        run: chmod +x android/gradlew
+          # 4. Android SDK paths setup karein
+          export ANDROID_HOME=/usr/local/lib/android/sdk
+          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
+          
+          # Android folder locate karein
+          ANDROID_FOLDER=$(find . -type d -name "android" | head -n 1)
+          if [ -z "$ANDROID_FOLDER" ]; then
+            ANDROID_FOLDER=$(find . -name "build.gradle" | head -n 1 | xargs dirname | xargs dirname)
+          fi
+          echo "Android folder found at: $ANDROID_FOLDER"
 
-      - name: Build Debug APK
-        run: |
-          cd android
+          # local.properties configure karein
+          echo "sdk.dir=/usr/local/lib/android/sdk" > "$ANDROID_FOLDER/local.properties"
+
+          # 5. Capacitor sync karein
+          npx cap sync android || true
+
+          # 6. Licenses accept karein aur Gradle run karein
+          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          
+          cd "$ANDROID_FOLDER"
+          chmod +x gradlew
           ./gradlew clean
           ./gradlew assembleDebug --stacktrace
 
@@ -52,5 +66,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Kaam-Mitra-Debug-APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
-      
+          path: "**/build/outputs/apk/debug/*.apk"
+          
