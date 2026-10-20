@@ -15,8 +15,21 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Install Android CMD Tools & Accept Licenses
+        run: |
+          mkdir -p $HOME/android-sdk/cmdline-tools
+          cd $HOME/android-sdk/cmdline-tools
+          wget -q https://google.com
+          unzip -q commandlinetools-linux-11076708_latest.zip
+          mv cmdline-tools latest
+          mkdir -p cmdline-tools
+          mv latest cmdline-tools/
+          export ANDROID_HOME=$HOME/android-sdk
+          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "$HOME/android-sdk/platform-tools" >> $GITHUB_PATH
 
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -32,15 +45,20 @@ jobs:
       - name: Sync Capacitor to Android
         run: npx cap sync android
 
+      - name: Configure local.properties
+        run: echo "sdk.dir=$HOME/android-sdk" > android/local.properties
+
       - name: Make Gradle Executable
         run: chmod +x android/gradlew
 
       - name: Build Debug APK
-        run: cd android && ./gradlew assembleDebug
+        run: cd android && ./gradlew assembleDebug --stacktrace
 
       - name: Upload Finished APK
         uses: actions/upload-artifact@v4
         with:
           name: Kaam-Mitra-Debug-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
+          
+    
           
