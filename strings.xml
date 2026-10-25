@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Kaam Mitra</string>
+    <string name="title_activity_main">Kaam Mitra</string>
+    <string name="package_name">com.kaammitra.app</string>
+    <string name="custom_url_scheme">com.kaammitra.app</string>
+</resources>

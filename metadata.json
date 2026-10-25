@@ -1,0 +1,8 @@
+{
+  "name": "Remix Kaam Mitra",
+  "description": "A simple Hindi-based mobile marketplace connecting local workers with job providers for easy and reliable employment opportunities.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

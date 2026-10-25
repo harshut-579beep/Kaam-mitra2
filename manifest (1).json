@@ -1,0 +1,20 @@
+{
+  "short_name": "काम मित्र",
+  "name": "Kaam Mitra - काम मित्र रोजगार एवं कृषि सेवा",
+  "description": "भारत का सरल ग्रामीण रोजगार, मजदूरी एवं ट्रैक्टर-कृषि मशीनरी बुकिंग मंच",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#15803d",
+  "theme_color": "#15803d",
+  "display": "standalone",
+  "orientation": "portrait",
+  "lang": "hi",
+  "categories": ["business", "productivity", "utilities"]
+}

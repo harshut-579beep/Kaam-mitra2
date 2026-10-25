@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#15803d" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="url(#grad)" />
+  <circle cx="256" cy="256" r="190" fill="#ffffff" fill-opacity="0.12" />
+  <!-- Center Emblem -->
+  <g fill="#ffffff" transform="translate(106, 116) scale(0.6)">
+    <!-- Stylized Tractor & Hands / Wrench -->
+    <path d="M40 280 L160 280 L180 200 L320 200 L340 280 L440 280 C460 280 480 300 480 320 L480 380 C480 400 460 420 440 420 L420 420 C400 470 350 500 290 500 C230 500 180 470 160 420 L120 420 C100 460 60 480 20 460 C-10 445 -20 410 -10 380 L10 320 C20 290 40 280 40 280 Z" fill="#ffffff"/>
+    <circle cx="290" cy="420" r="60" fill="#15803d" stroke="#ffffff" stroke-width="16"/>
+    <circle cx="50" cy="390" r="40" fill="#15803d" stroke="#ffffff" stroke-width="12"/>
+  </g>
+  <!-- Hindi Initials text in clean bold font -->
+  <text x="256" y="320" font-family="'Yantramanav', sans-serif" font-weight="900" font-size="140" fill="#ffffff" text-anchor="middle" letter-spacing="2">काम</text>
+  <text x="256" y="410" font-family="'Yantramanav', sans-serif" font-weight="700" font-size="64" fill="#fde047" text-anchor="middle">मित्र</text>
+</svg>
