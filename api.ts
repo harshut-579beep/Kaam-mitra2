@@ -11,7 +11,8 @@ import {
   AdminOverview
 } from './types';
 
-const BASE_URL = '/api';
+// यहाँ हमने Render का पूरा लाइव बैकएंड लिंक जोड़ दिया है ताकि ऐप सीधा सर्वर से बात करे
+const BASE_URL = 'https://kaam-mitr3a2.onrender.com/api';
 
 // Platform settings & owner contact
 export async function fetchPlatformSettings(): Promise<PlatformSettings> {
@@ -366,4 +367,5 @@ export async function resetDatabase(adminPhone: string): Promise<{ message: stri
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'रीसेट में त्रुटि');
   return data;
-}
+  }
+    
