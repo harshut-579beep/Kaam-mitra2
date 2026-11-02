@@ -57,6 +57,9 @@ jobs:
             exit 1
           fi
 
+          # Zip khulte hi purani lock file aur node_modules ko saaf kar rahe hain
+          rm -rf node_modules package-lock.json
+
           test -f package.json || {
             echo "ERROR: package.json missing from project root."
             exit 1
@@ -64,7 +67,6 @@ jobs:
 
       - name: Install Web Dependencies
         run: |
-          rm -rf node_modules package-lock.json
           npm install --legacy-peer-deps --force
 
       - name: Build Web Assets
