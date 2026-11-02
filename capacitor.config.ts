@@ -1,7 +1,7 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.kaammitra.app',
+  appId: 'com.kaammitra.v2',
   appName: 'Kaam Mitra',
   webDir: 'dist',
   server: {
