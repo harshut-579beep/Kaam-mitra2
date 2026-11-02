@@ -64,13 +64,13 @@ jobs:
 
       - name: Install Web Dependencies
         run: |
+          rm -f package-lock.json
           npm install --legacy-peer-deps --force
 
       - name: Build Web Assets
         run: |
           npm run build
 
-      # यह नया स्टेप जोड़ा गया है ताकि एंड्रॉइड फोल्डर अपने आप बन जाए
       - name: Add Capacitor Android
         run: |
           npx cap add android || npx cap sync android
