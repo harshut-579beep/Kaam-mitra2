@@ -1,4 +1,4 @@
-name: Build Android APK
+Name: Build Android APK
 
 on:
   workflow_dispatch:
@@ -70,6 +70,11 @@ jobs:
         run: |
           npm run build
 
+      # यह नया स्टेप जोड़ा गया है ताकि एंड्रॉइड फोल्डर अपने आप बन जाए
+      - name: Add Capacitor Android
+        run: |
+          npx cap add android || npx cap sync android
+
       - name: Check Android Project
         run: |
           test -d android || {
@@ -106,3 +111,4 @@ jobs:
           name: Kaam-Mitra-Debug-APK
           path: android/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
+          
