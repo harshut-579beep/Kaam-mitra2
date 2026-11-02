@@ -64,7 +64,7 @@ jobs:
 
       - name: Install Web Dependencies
         run: |
-          rm -f package-lock.json
+          rm -rf node_modules package-lock.json
           npm install --legacy-peer-deps --force
 
       - name: Build Web Assets
